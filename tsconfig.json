@@ -3,7 +3,21 @@
     "outDir": "dist",
     "module": "commonjs",
     "target": "es6",
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["node", "jest"],
+    "strict": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "importHelpers": true,
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
   "exclude": [
     "node_modules"

@@ -3,7 +3,7 @@ import { Server } from 'net'
 import Application from 'koa'
 
 export class KoaServerManager {
-  private server: Server
+  private server: Server | undefined
 
   public startBeforeEach(app: Application, port: number = 8888): void {
     beforeEach(() => {

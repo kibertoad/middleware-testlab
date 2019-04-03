@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mutation middleware koa happy path 1`] = `
+Object {
+  "error": [Function],
+  "info": [Function],
+}
+`;
