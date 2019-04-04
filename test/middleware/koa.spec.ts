@@ -12,14 +12,14 @@ describe('mutation middleware', () => {
     it('happy path', async () => {
       const app = newKoaApp([koaMiddleware()], (ctx: BaseContext, next: Function) => {
         expect(ctx.logger).toMatchSnapshot()
-        ctx.status = 201
+        ctx.status = 204
         next()
       })
       server.start(app)
 
       const response = await server.request().get(DEFAULT_ENDPOINT)
 
-      expect(response.status).toEqual(201)
+      expect(response.status).toEqual(204)
     })
   })
 })
