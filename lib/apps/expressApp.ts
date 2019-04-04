@@ -25,9 +25,6 @@ export function newExpressApp(
   endpoint: string | EndpointDefinition = DEFAULT_ENDPOINT
 ): Application {
   const app = express()
-  middleware.forEach((middlewareEntry: RequestHandlerParams) => {
-    app.use(middlewareEntry)
-  })
 
   // Resolve endpoint from params
   let method: string
@@ -41,6 +38,9 @@ export function newExpressApp(
   }
 
   const router = Router()
+  middleware.forEach((middlewareEntry: RequestHandlerParams) => {
+    router.use(middlewareEntry)
+  })
   // @ts-ignore
   router[method](path, endpointHandler)
   app.use(router)

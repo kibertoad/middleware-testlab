@@ -24,7 +24,7 @@ export function newKoaApp(
   const router = new Router()
 
   middleware.forEach((middlewareEntry: Middleware) => {
-    app.use(middlewareEntry)
+    router.use(middlewareEntry)
   })
 
   // Resolve endpoint from params
