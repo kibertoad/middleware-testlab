@@ -45,5 +45,9 @@ export function newExpressApp({
   // @ts-ignore
   router[method](path, middleware, handler)
   app.use(router)
+
+  app.use((err: Error, _req: Request, res: Response) => {
+    res.status(500).json({ details: err.message })
+  })
   return app
 }
