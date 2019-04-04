@@ -19,11 +19,15 @@ const DEFAULT_HANDLER = (_req: Request, res: Response, next: Function) => {
  * @param {RequestHandlerParams} [endpointHandler] - if handler is not specified, by default sends 204 NO CONTENT
  * @param {string | EndpointDefinition} [endpoint='/'] - if endpoint is passed as string, or not specified, by default GET method is used.
  */
-export function newExpressApp(
-  middleware: RequestHandlerParams[],
-  endpointHandler: RequestHandlerParams = DEFAULT_HANDLER,
-  endpoint: string | EndpointDefinition = DEFAULT_ENDPOINT
-): Application {
+export function newExpressApp({
+  middleware,
+  handler = DEFAULT_HANDLER,
+  endpoint = DEFAULT_ENDPOINT
+}: {
+  middleware: RequestHandlerParams[]
+  handler?: RequestHandlerParams
+  endpoint?: string | EndpointDefinition
+}): Application {
   const app = express()
 
   // Resolve endpoint from params
@@ -39,7 +43,7 @@ export function newExpressApp(
 
   const router = Router()
   // @ts-ignore
-  router[method](path, middleware, endpointHandler)
+  router[method](path, middleware, handler)
   app.use(router)
   return app
 }

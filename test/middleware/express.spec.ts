@@ -6,15 +6,15 @@ import { Request, Response } from 'express'
 describe('mutation middleware', () => {
   describe('express', () => {
     it('happy path', async () => {
-      const app = newExpressApp(
-        [expressMiddleware()],
-        (req: Request, res: Response, next: Function) => {
+      const app = newExpressApp({
+        middleware: [expressMiddleware()],
+        handler: (req: Request, res: Response, next: Function) => {
           // @ts-ignore
           expect(req.logger).toMatchSnapshot()
           res.status(204).send()
           next()
         }
-      )
+      })
 
       const response = await request(app).get(DEFAULT_ENDPOINT)
 

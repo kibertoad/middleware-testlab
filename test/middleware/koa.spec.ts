@@ -10,10 +10,13 @@ describe('mutation middleware', () => {
     server.stopAfterEach()
 
     it('happy path', async () => {
-      const app = newKoaApp([koaMiddleware()], (ctx: BaseContext, next: Function) => {
-        expect(ctx.logger).toMatchSnapshot()
-        ctx.status = 204
-        next()
+      const app = newKoaApp({
+        middleware: [koaMiddleware()],
+        handler: (ctx: BaseContext, next: Function) => {
+          expect(ctx.logger).toMatchSnapshot()
+          ctx.status = 204
+          next()
+        }
       })
       server.start(app)
 
