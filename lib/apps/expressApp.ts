@@ -38,11 +38,8 @@ export function newExpressApp(
   }
 
   const router = Router()
-  middleware.forEach((middlewareEntry: RequestHandlerParams) => {
-    router.use(middlewareEntry)
-  })
   // @ts-ignore
-  router[method](path, endpointHandler)
+  router[method](path, middleware, endpointHandler)
   app.use(router)
   return app
 }
