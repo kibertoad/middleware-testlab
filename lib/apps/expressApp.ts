@@ -1,5 +1,5 @@
 import { Application, Request, Response } from 'express'
-import express from 'express'
+import express, { Router } from 'express'
 import { RequestHandlerParams } from 'express-serve-static-core'
 import { EndpointDefinition } from './apps'
 
@@ -40,7 +40,9 @@ export function newExpressApp(
     path = endpoint.path
   }
 
+  const router = Router()
   // @ts-ignore
-  app[method](path, endpointHandler)
+  router[method](path, endpointHandler)
+  app.use(router)
   return app
 }
