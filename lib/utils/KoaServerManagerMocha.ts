@@ -10,18 +10,21 @@ export class KoaServerManagerMocha {
     return supertest(this.server)
   }
 
+  public start(app: Application, port: number = 8888): void {
+    this.stop()
+    this.server = app.listen(port)
+  }
+
   public startBeforeEach(app: Application, port: number = 8888): void {
     beforeEach(() => {
-      this.stop()
-      this.server = app.listen(port)
+      this.start(app, port)
     })
   }
 
   public startBefore(app: Application, port: number = 8888): void {
     // @ts-ignore
     before(() => {
-      this.stop()
-      this.server = app.listen(port)
+      this.start(app, port)
     })
   }
 

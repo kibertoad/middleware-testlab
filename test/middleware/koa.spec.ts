@@ -6,7 +6,7 @@ import { KoaServerManagerJest } from '../../lib/utils/KoaServerManagerJest'
 
 describe('mutation middleware', () => {
   describe('koa', () => {
-    const server = new KoaServerManagerJest();
+    const server = new KoaServerManagerJest()
     server.stopAfterEach()
 
     it('happy path', async () => {
@@ -15,7 +15,7 @@ describe('mutation middleware', () => {
         ctx.status = 201
         next()
       })
-      server.startBeforeEach(app)
+      server.start(app)
 
       const response = await server.request().get(DEFAULT_ENDPOINT)
 
