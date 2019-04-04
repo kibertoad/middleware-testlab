@@ -1,9 +1,14 @@
 import { Server } from 'net'
 // @ts-ignore
 import Application from 'koa'
+import supertest, { SuperTest, Test } from 'supertest'
 
-export class KoaServerManager {
+export class KoaServerManagerMocha {
   private server: Server | undefined
+
+  public request(): SuperTest<Test> {
+    return supertest(this.server)
+  }
 
   public startBeforeEach(app: Application, port: number = 8888): void {
     beforeEach(() => {
@@ -12,8 +17,9 @@ export class KoaServerManager {
     })
   }
 
-  public startBeforeAll(app: Application, port: number = 8888): void {
-    beforeEach(() => {
+  public startBefore(app: Application, port: number = 8888): void {
+    // @ts-ignore
+    before(() => {
       this.stop()
       this.server = app.listen(port)
     })
@@ -25,8 +31,10 @@ export class KoaServerManager {
     })
   }
 
-  public stopAfterAll(): void {
-    afterAll(() => {
+  // afterAll for mocha
+  public stopAfter(): void {
+    // @ts-ignore
+    after(() => {
       this.stop()
     })
   }
