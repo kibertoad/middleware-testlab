@@ -6,7 +6,7 @@ import { EndpointDefinition } from './apps'
 export const DEFAULT_ENDPOINT = '/'
 const DEFAULT_HANDLER = (_req: Request, res: Response, next: Function) => {
   try {
-    res.status(201).send
+    res.status(201).send()
   } catch (e) {
     console.error('Error while processing request: ', e)
     next(e)
