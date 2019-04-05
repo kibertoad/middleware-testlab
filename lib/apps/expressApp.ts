@@ -46,7 +46,7 @@ export function newExpressApp({
   router[method](path, middleware, handler)
   app.use(router)
 
-  app.use((err: Error, _req: Request, res: Response) => {
+  app.use((err: Error, _req: Request, res: Response, _next: Function) => {
     res.status(500).json({ details: err.message })
   })
   return app
