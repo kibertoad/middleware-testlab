@@ -39,17 +39,17 @@ describe('mutation middleware', () => {
   describe('express', () => {
     it('happy path', async () => {
       // Arrange: Instantiate app    
-      const app = newExpressApp(
+      const app = newExpressApp({
         // Arrange: Pass middleware under test
-        [expressMiddleware()],
-        (req: Request, res: Response, next: Function) => {
+        middleware: [expressMiddleware()],
+        handler: (req: Request, res: Response, next: Function) => {
           // Assert: Check middleware execution results inside endpoint handler
           // @ts-ignore
           expect(req.logger).toMatchSnapshot()
-          res.status(201).send()
+          res.status(204).send()
           next()
         }
-      )
+      })      
 
       // Act: Send request for middleware to process
       const response = await request(app).get(DEFAULT_ENDPOINT)
@@ -76,16 +76,17 @@ describe('mutation middleware', () => {
     server.stopAfterEach()
 
     it('happy path', async () => {
-      // Arrange: Instantiate app    
-      const app = newKoaApp(
-      // Arrange: Pass middleware under test
-        [koaMiddleware()], 
-        (ctx: BaseContext, next: Function) => {
+      // Arrange: Instantiate app 
+      const app = newKoaApp({
+        // Arrange: Pass middleware under test
+        middleware: [koaMiddleware()],
+        handler: (ctx: BaseContext, next: Function) => {
           // Assert: Check middleware execution results inside endpoint handler        
           expect(ctx.logger).toMatchSnapshot()
-          ctx.status = 201
+          ctx.status = 204
           next()
-        })
+        }
+      })      
       server.start(app)
 
       // Act: Send request for middleware to process
