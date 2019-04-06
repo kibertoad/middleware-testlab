@@ -43,7 +43,7 @@ export function newExpressApp({
     method = 'get'
     path = endpoint
   } else {
-    method = endpoint.method
+    method = endpoint.method.toLowerCase()
     path = endpoint.path
   }
 
