@@ -7,7 +7,7 @@ export class KoaServerManagerMocha {
   private server: Server | undefined
   private readonly port: number
 
-  constructor(port?: number) {
+  public constructor(port?: number) {
     this.port = port || 8888
   }
 
