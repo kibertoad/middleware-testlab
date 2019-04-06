@@ -1,9 +1,9 @@
 # middleware-testlab
 
+Test framework for Node.js middleware (Koa and Express)
+
 [![Build Status][travis-badge]][travis]
 [![MIT License][license-badge]][license]
-
-Test framework for Node.js middleware (Koa and Express)
 
 [travis-badge]: https://travis-ci.org/kibertoad/middleware-testlab.svg?branch=master
 [travis]: https://travis-ci.org/kibertoad/middleware-testlab
