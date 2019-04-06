@@ -11,23 +11,30 @@ const DEFAULT_HANDLER = (ctx: BaseContext, next: Function) => {
 
 /**
  *
- * @param {RequestHandlerParams[]} [middleware=[]]
- * @param {RequestHandlerParams} [endpointHandler] - if handler is not specified, by default sends 204 NO CONTENT
+ * @param {Middleware[]} [appMiddleware=[]]
+ * @param {Middleware[]} [routerMiddleware=[]]
+ * @param {Middleware} [handler] - if handler is not specified, by default sends 204 NO CONTENT
  * @param {string | EndpointDefinition} [endpoint='/'] - if endpoint is passed as string, or not specified, by default GET method is used.
  */
 export function newKoaApp({
-  middleware = [],
+  appMiddleware = [],
+  routerMiddleware = [],
   handler = DEFAULT_HANDLER,
   endpoint = DEFAULT_ENDPOINT
 }: {
-  middleware?: Middleware[]
+  appMiddleware?: Middleware[]
+  routerMiddleware?: Middleware[]
   handler?: Middleware
   endpoint?: string | EndpointDefinition
 }): Application {
   const app = new Koa()
+  appMiddleware.forEach((middlewareEntry: Middleware) => {
+    app.use(middlewareEntry)
+  })
+
   const router = new Router()
 
-  middleware.forEach((middlewareEntry: Middleware) => {
+  routerMiddleware.forEach((middlewareEntry: Middleware) => {
     router.use(middlewareEntry)
   })
 

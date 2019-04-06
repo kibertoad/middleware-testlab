@@ -3,15 +3,16 @@ import { BaseContext } from 'koa'
 import { newKoaApp, DEFAULT_ENDPOINT } from '../../lib/apps/koaApp'
 import { koaMiddleware } from './koaRequestMutationMiddleware'
 import { KoaServerManagerJest } from '../../lib/utils/KoaServerManagerJest'
+const port = 8888
 
-describe('mutation middleware', () => {
+describe('mutation routeMiddleware', () => {
   describe('koa', () => {
-    const server = new KoaServerManagerJest()
+    const server = new KoaServerManagerJest(port)
     server.stopAfterEach()
 
     it('happy path', async () => {
       const app = newKoaApp({
-        middleware: [koaMiddleware()],
+        routerMiddleware: [koaMiddleware()],
         handler: (ctx: BaseContext, next: Function) => {
           expect(ctx.logger).toMatchSnapshot()
           ctx.status = 204

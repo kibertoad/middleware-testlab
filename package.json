@@ -1,6 +1,6 @@
 {
   "name": "middleware-testlab",
-  "version": "1.4.2",
+  "version": "2.0.0",
   "license": "MIT",
   "maintainers": [
     {
@@ -35,8 +35,8 @@
     "jest": "^24.7.1",
     "prettier": "^1.16.4",
     "supertest": "^4.0.2",
-    "ts-jest": "^24.0.1",
-    "typescript": "^3.4.1"
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.4.2"
   },
   "homepage": "http://github.com/kibertoad/middleware-testlab",
   "keywords": [

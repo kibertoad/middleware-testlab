@@ -3,11 +3,11 @@ import { expressMiddleware } from './expressRequestMutationMiddleware'
 import request from 'supertest'
 import { Request, Response } from 'express'
 
-describe('mutation middleware', () => {
+describe('mutation routeMiddleware', () => {
   describe('express', () => {
     it('happy path', async () => {
       const app = newExpressApp({
-        middleware: [expressMiddleware()],
+        routeMiddleware: [expressMiddleware()],
         handler: (req: Request, res: Response, next: Function) => {
           // @ts-ignore
           expect(req.logger).toMatchSnapshot()

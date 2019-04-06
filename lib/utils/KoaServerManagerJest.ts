@@ -5,23 +5,28 @@ import supertest, { SuperTest, Test } from 'supertest'
 
 export class KoaServerManagerJest {
   private server: Server | undefined
+  private readonly port: number
+
+  constructor(port?: number) {
+    this.port = port || 8888
+  }
 
   public request(): SuperTest<Test> {
     return supertest(this.server)
   }
 
-  public start(app: Application, port: number = 8888): void {
+  public start(app: Application, port?: number): void {
     this.stop()
-    this.server = app.listen(port)
+    this.server = app.listen(port || this.port)
   }
 
-  public startBeforeEach(app: Application, port: number = 8888): void {
+  public startBeforeEach(app: Application, port?: number): void {
     beforeEach(() => {
       this.start(app, port)
     })
   }
 
-  public startBeforeAll(app: Application, port: number = 8888): void {
+  public startBeforeAll(app: Application, port?: number): void {
     beforeAll(() => {
       this.start(app, port)
     })

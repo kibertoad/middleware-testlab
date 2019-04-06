@@ -41,7 +41,7 @@ describe('mutation middleware', () => {
       // Arrange: Instantiate app    
       const app = newExpressApp({
         // Arrange: Pass middleware under test
-        middleware: [expressMiddleware()],
+        routeMiddleware: [expressMiddleware()],
         handler: (req: Request, res: Response, next: Function) => {
           // Assert: Check middleware execution results inside endpoint handler
           // @ts-ignore
@@ -79,7 +79,7 @@ describe('mutation middleware', () => {
       // Arrange: Instantiate app 
       const app = newKoaApp({
         // Arrange: Pass middleware under test
-        middleware: [koaMiddleware()],
+        routerMiddleware: [koaMiddleware()],
         handler: (ctx: BaseContext, next: Function) => {
           // Assert: Check middleware execution results inside endpoint handler        
           expect(ctx.logger).toMatchSnapshot()
