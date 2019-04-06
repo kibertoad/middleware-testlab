@@ -17,7 +17,8 @@
     "importHelpers": true,
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
   },
   "exclude": [
     "node_modules"
