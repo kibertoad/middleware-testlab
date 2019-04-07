@@ -19,7 +19,7 @@
     "express": "^4.16.4",
     "koa": "^2.7.0",
     "koa-router": "^7.4.0",
-    "serialize-error": "^4.1.0"
+    "serialize-error": "^3.0.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.6.0",
@@ -29,6 +29,7 @@
     "@types/koa": "^2.0.48",
     "@types/koa-router": "^7.0.40",
     "@types/node": "^10.14.4",
+    "@types/serialize-error": "^2.1.0",
     "@types/supertest": "^2.0.7",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",

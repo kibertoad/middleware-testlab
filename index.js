@@ -5,14 +5,15 @@ const { KoaServerManagerJest } = require('./dist/lib/utils/KoaServerManagerJest'
 const { KoaServerManagerMocha } = require('./dist/lib/utils/KoaServerManagerMocha')
 
 const { okHandler: okHandlerKoa } = require('./dist/lib/handlers/commonHandlersKoa')
-const { okHandler: okHandlerExpress } = require('./dist/lib/handlers/commonHandlersExpress')
+const { okHandler: okHandlerExpress, throwingHandler: throwingHandlerExpress } = require('./dist/lib/handlers/commonHandlersExpress')
 
 const handlers = {
   koa: {
     okHandler: okHandlerKoa
   },
   express: {
-    okHandler: okHandlerExpress
+    okHandler: okHandlerExpress,
+    throwingHandler: throwingHandlerExpress
   }
 }
 
