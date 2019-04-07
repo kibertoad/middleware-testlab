@@ -1,6 +1,6 @@
 {
   "name": "middleware-testlab",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "license": "MIT",
   "maintainers": [
     {
@@ -18,7 +18,8 @@
   "dependencies": {
     "express": "^4.16.4",
     "koa": "^2.7.0",
-    "koa-router": "^7.4.0"
+    "koa-router": "^7.4.0",
+    "serialize-error": "^4.1.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.6.0",

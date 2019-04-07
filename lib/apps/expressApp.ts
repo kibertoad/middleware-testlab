@@ -2,6 +2,7 @@ import { Application, Request, Response } from 'express'
 import express, { Router } from 'express'
 import { RequestHandlerParams } from 'express-serve-static-core'
 import { EndpointDefinition } from './apps'
+import serializeError from 'serialize-error'
 
 export const DEFAULT_ENDPOINT = '/'
 const DEFAULT_HANDLER = (_req: Request, res: Response, next: Function) => {
@@ -60,7 +61,9 @@ export function newExpressApp({
   app.use(router)
 
   app.use((err: Error, _req: Request, res: Response, _next: Function) => {
-    res.status(500).json({ details: err.message })
+    if (err) {
+      res.status(500).json(serializeError(err))
+    }
   })
   return app
 }
