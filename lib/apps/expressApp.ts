@@ -1,7 +1,7 @@
 import { Application, Request, Response } from 'express'
 import express, { Router } from 'express'
 import { RequestHandlerParams } from 'express-serve-static-core'
-import { EndpointDefinition } from './apps'
+import { ExpressEndpointAssertor, EndpointDefinition } from './apps'
 import serializeError from 'serialize-error'
 
 export const DEFAULT_ENDPOINT = '/'
@@ -18,6 +18,7 @@ const DEFAULT_HANDLER = (_req: Request, res: Response, next: Function) => {
  *
  * @param {RequestHandlerParams[]} [appMiddleware=[]]
  * @param {RequestHandlerParams[]} [routeMiddleware=[]]
+ * @param {ExpressEndpointAssertor[]} [transformedRequestAssertors=[]]
  * @param {RequestHandlerParams[]} [routerMiddleware=[]]
  * @param {RequestHandlerParams} [endpointHandler] - if handler is not specified, by default sends 204 NO CONTENT
  * @param {string | EndpointDefinition} [endpoint='/'] - if endpoint is passed as string, or not specified, by default GET method is used.
@@ -26,12 +27,14 @@ export function newExpressApp({
   appMiddleware = [],
   routeMiddleware = [],
   routerMiddleware = [],
+  transformedRequestAssertors = [],
   handler = DEFAULT_HANDLER,
   endpoint = DEFAULT_ENDPOINT
 }: {
   appMiddleware?: RequestHandlerParams[]
   routeMiddleware?: RequestHandlerParams[]
   routerMiddleware?: RequestHandlerParams[]
+  transformedRequestAssertors?: ExpressEndpointAssertor[]
   handler?: RequestHandlerParams
   endpoint?: string | EndpointDefinition
 }): Application {
@@ -53,11 +56,19 @@ export function newExpressApp({
     router.use(middleware)
   })
 
+  const assertorMiddleware = transformedRequestAssertors.map(assertor => {
+    return async (req: Request, _res: Response, next: Function) => {
+      await assertor(req)
+      next()
+    }
+  })
+
   // @ts-ignore
-  router[method](path, routeMiddleware, handler)
+  router[method](path, routeMiddleware, assertorMiddleware, handler)
   appMiddleware.forEach(middleware => {
     app.use(middleware)
   })
+
   app.use(router)
 
   app.use((err: Error, _req: Request, res: Response, _next: Function) => {

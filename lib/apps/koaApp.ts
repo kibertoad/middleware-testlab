@@ -1,7 +1,7 @@
 import Koa, { BaseContext, Middleware } from 'koa'
 import Router from 'koa-router'
 import Application from 'koa'
-import { EndpointDefinition } from './apps'
+import { EndpointDefinition, KoaEndpointAssertor } from './apps'
 
 export const DEFAULT_ENDPOINT = '/'
 const DEFAULT_HANDLER = (ctx: BaseContext, next: Function) => {
@@ -13,17 +13,20 @@ const DEFAULT_HANDLER = (ctx: BaseContext, next: Function) => {
  *
  * @param {Middleware[]} [appMiddleware=[]]
  * @param {Middleware[]} [routerMiddleware=[]]
+ * @param {KoaEndpointAssertor[]} [transformedRequestAssertors=[]]
  * @param {Middleware} [handler] - if handler is not specified, by default sends 204 NO CONTENT
  * @param {string | EndpointDefinition} [endpoint='/'] - if endpoint is passed as string, or not specified, by default GET method is used.
  */
 export function newKoaApp({
   appMiddleware = [],
   routerMiddleware = [],
+  transformedRequestAssertors = [],
   handler = DEFAULT_HANDLER,
   endpoint = DEFAULT_ENDPOINT
 }: {
   appMiddleware?: Middleware[]
   routerMiddleware?: Middleware[]
+  transformedRequestAssertors?: KoaEndpointAssertor[]
   handler?: Middleware
   endpoint?: string | EndpointDefinition
 }): Application {
@@ -36,6 +39,13 @@ export function newKoaApp({
 
   routerMiddleware.forEach((middlewareEntry: Middleware) => {
     router.use(middlewareEntry)
+  })
+
+  transformedRequestAssertors.forEach(assertor => {
+    router.use(async (ctx: BaseContext, next: Function) => {
+      await assertor(ctx)
+      next()
+    })
   })
 
   // Resolve endpoint from params

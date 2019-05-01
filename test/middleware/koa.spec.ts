@@ -13,11 +13,12 @@ describe('mutation routeMiddleware', () => {
     it('happy path', async () => {
       const app = newKoaApp({
         routerMiddleware: [koaMiddleware()],
-        handler: (ctx: BaseContext, next: Function) => {
-          expect(ctx.logger).toMatchSnapshot()
-          ctx.status = 204
-          next()
-        }
+        transformedRequestAssertors: [
+          (ctx: BaseContext) => {
+            // @ts-ignore
+            expect(ctx.logger).toMatchSnapshot()
+          }
+        ]
       })
       server.start(app)
 
