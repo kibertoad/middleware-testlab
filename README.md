@@ -42,10 +42,15 @@ describe('mutation middleware', () => {
       const app = newExpressApp({
         // Arrange: Pass middleware under test
         routeMiddleware: [expressMiddleware()],
-        handler: (req: Request, res: Response, next: Function) => {
+        transformedRequestAssertors: [
+          (req: Request): void => {
           // Assert: Check middleware execution results inside endpoint handler
           // @ts-ignore
           expect(req.logger).toMatchSnapshot()
+          }
+        ]
+        // This is optional, if no handler is passed, default handler will return 204
+        handler: (req: Request, res: Response, next: Function) => {
           res.status(204).send()
           next()
         }
@@ -79,9 +84,14 @@ describe('mutation middleware', () => {
       const app = newKoaApp({
         // Arrange: Pass middleware under test
         routerMiddleware: [koaMiddleware()],
-        handler: (ctx: BaseContext, next: Function) => {
+        transformedRequestAssertors: [
+          (ctx: BaseContext): void => {
           // Assert: Check middleware execution results inside endpoint handler        
           expect(ctx.logger).toMatchSnapshot()
+          }
+        ]        
+        // This is optional, if no handler is passed, default handler will return 204        
+        handler: (ctx: BaseContext, next: Function) => {
           ctx.status = 204
           next()
         }
