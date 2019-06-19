@@ -30,10 +30,10 @@ npm install middleware-testlab --save-dev
 ## Example (Express)
 
 ```
-import { newExpressApp, DEFAULT_ENDPOINT } from '../../lib/apps/expressApp'
-import { expressMiddleware } from './expressRequestMutationMiddleware'
 import request from 'supertest'
+import { newExpressApp, DEFAULT_ENDPOINT } from 'middleware-testlab'
 import { Request, Response } from 'express'
+import { expressMiddleware } from './expressRequestMutationMiddleware'
 
 describe('mutation middleware', () => {
   describe('express', () => {
@@ -66,9 +66,8 @@ describe('mutation middleware', () => {
 ```
 import { BaseContext } from 'koa'
 
-import { newKoaApp, DEFAULT_ENDPOINT } from '../../lib/apps/koaApp'
+import { newKoaApp, DEFAULT_ENDPOINT, KoaServerManagerJest } from 'middleware-testlab'
 import { koaMiddleware } from './koaRequestMutationMiddleware'
-import { KoaServerManagerJest } from '../../lib/utils/KoaServerManagerJest'
 
 describe('mutation middleware', () => {
   describe('koa', () => {
