@@ -11,7 +11,7 @@ export interface ExpressEndpointAssertor {
 }
 
 export interface ErrorAssertor {
-  (error: Error): void
+  (error: any): void
 }
 
 export interface KoaEndpointAssertor {

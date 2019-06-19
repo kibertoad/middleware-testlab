@@ -1,11 +1,15 @@
 import { Application, NextFunction, Request, Response } from 'express'
 import express, { Router } from 'express'
-import { ErrorRequestHandler, RequestHandlerParams } from 'express-serve-static-core'
+import {
+  ErrorRequestHandler,
+  RequestHandler,
+  RequestHandlerParams
+} from 'express-serve-static-core'
 import { ExpressEndpointAssertor, EndpointDefinition, ErrorAssertor } from './apps'
 import serializeError from 'serialize-error'
 
 export const DEFAULT_ENDPOINT = '/'
-const DEFAULT_HANDLER = (_req: Request, res: Response, next: Function) => {
+const DEFAULT_HANDLER: RequestHandler = (_req: Request, res: Response, next: Function) => {
   try {
     res.status(204).send()
   } catch (e) {
@@ -14,7 +18,13 @@ const DEFAULT_HANDLER = (_req: Request, res: Response, next: Function) => {
   }
 }
 
-const DEFAULT_ERROR_HANDLER = (err: Error, _req: Request, res: Response, _next: Function) => {
+const DEFAULT_ERROR_HANDLER: ErrorRequestHandler = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  err: any,
+  _req: Request,
+  res: Response,
+  _next: Function
+) => {
   if (err) {
     res.status(500).json(serializeError(err))
   }
