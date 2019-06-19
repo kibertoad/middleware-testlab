@@ -1,7 +1,7 @@
 import { newExpressApp, DEFAULT_ENDPOINT } from '../../lib/apps/expressApp'
 import { expressMiddleware } from './expressRequestMutationMiddleware'
 import request from 'supertest'
-import { Request } from 'express'
+import { Request, Response, NextFunction } from 'express'
 
 describe('mutation routeMiddleware', () => {
   describe('express', () => {
@@ -18,6 +18,37 @@ describe('mutation routeMiddleware', () => {
 
       const response = await request(app).get(DEFAULT_ENDPOINT)
       expect(response.status).toEqual(204)
+    })
+
+    it('supports error assertors', async () => {
+      const app = newExpressApp({
+        appMiddleware: [
+          (req: Request, res: Response, next: NextFunction) => {
+            const error: any = new Error('Something broke down')
+            error.details = {
+              timestamp: '2019-11-6'
+            }
+            next(error)
+          }
+        ],
+        errorAssertors: [
+          error => {
+            // @ts-ignore
+            expect(error.details).toMatchSnapshot()
+          }
+        ]
+      })
+
+      const response = await request(app).get(DEFAULT_ENDPOINT)
+
+      expect(response.body).toMatchObject({
+        message: 'Something broke down',
+        name: 'Error',
+        details: {
+          timestamp: '2019-11-6'
+        }
+      })
+      expect(response.status).toEqual(500)
     })
   })
 })

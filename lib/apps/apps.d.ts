@@ -10,6 +10,10 @@ export interface ExpressEndpointAssertor {
   (request: Request): void
 }
 
+export interface ErrorAssertor {
+  (error: Error): void
+}
+
 export interface KoaEndpointAssertor {
   (ctx: BaseContext): void
 }

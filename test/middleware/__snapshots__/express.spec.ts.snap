@@ -6,3 +6,9 @@ Object {
   "info": [Function],
 }
 `;
+
+exports[`mutation routeMiddleware express supports error assertors 1`] = `
+Object {
+  "timestamp": "2019-11-6",
+}
+`;

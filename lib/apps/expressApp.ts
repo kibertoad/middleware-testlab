@@ -1,7 +1,7 @@
-import { Application, Request, Response } from 'express'
+import { Application, NextFunction, Request, Response } from 'express'
 import express, { Router } from 'express'
 import { RequestHandlerParams } from 'express-serve-static-core'
-import { ExpressEndpointAssertor, EndpointDefinition } from './apps'
+import { ExpressEndpointAssertor, EndpointDefinition, ErrorAssertor } from './apps'
 import serializeError from 'serialize-error'
 
 export const DEFAULT_ENDPOINT = '/'
@@ -19,8 +19,9 @@ const DEFAULT_HANDLER = (_req: Request, res: Response, next: Function) => {
  * @param {RequestHandlerParams[]} [appMiddleware=[]]
  * @param {RequestHandlerParams[]} [routeMiddleware=[]]
  * @param {ExpressEndpointAssertor[]} [transformedRequestAssertors=[]]
+ * @param {ErrorAssertor[]} [errorAssertors=[]]
  * @param {RequestHandlerParams[]} [routerMiddleware=[]]
- * @param {RequestHandlerParams} [endpointHandler] - if handler is not specified, by default sends 204 NO CONTENT
+ * @param {RequestHandlerParams} [handler] - if handler is not specified, by default sends 204 NO CONTENT
  * @param {string | EndpointDefinition} [endpoint='/'] - if endpoint is passed as string, or not specified, by default GET method is used.
  */
 export function newExpressApp({
@@ -28,6 +29,7 @@ export function newExpressApp({
   routeMiddleware = [],
   routerMiddleware = [],
   transformedRequestAssertors = [],
+  errorAssertors = [],
   handler = DEFAULT_HANDLER,
   endpoint = DEFAULT_ENDPOINT
 }: {
@@ -35,6 +37,7 @@ export function newExpressApp({
   routeMiddleware?: RequestHandlerParams[]
   routerMiddleware?: RequestHandlerParams[]
   transformedRequestAssertors?: ExpressEndpointAssertor[]
+  errorAssertors?: ErrorAssertor[]
   handler?: RequestHandlerParams
   endpoint?: string | EndpointDefinition
 }): Application {
@@ -68,10 +71,23 @@ export function newExpressApp({
   appMiddleware.forEach(middleware => {
     app.use(middleware)
   })
+  if (errorAssertors && errorAssertors.length > 0) {
+    app.use((_req: Request, _res: Response, next: NextFunction) => {
+      return next(new Error(`Expected error to be thrown, but it wasn't`))
+    })
+  }
 
   app.use(router)
 
   app.use((err: Error, _req: Request, res: Response, _next: Function) => {
+    try {
+      errorAssertors.forEach(assertor => {
+        assertor(err)
+      })
+    } catch (e) {
+      err = e
+    }
+
     if (err) {
       res.status(500).json(serializeError(err))
     }

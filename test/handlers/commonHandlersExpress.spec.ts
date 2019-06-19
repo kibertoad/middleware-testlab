@@ -16,6 +16,19 @@ describe('commonHandler', () => {
       })
       expect(response.status).toEqual(200)
     })
+
+    it('error assertors throw an error when no error is raised', async () => {
+      const app = newExpressApp({
+        handler: okHandler,
+        errorAssertors: [_error => {}]
+      })
+
+      const response = await request(app).get(DEFAULT_ENDPOINT)
+
+      delete response.body.stack
+      expect(response.status).toEqual(500)
+      expect(response.body).toMatchSnapshot()
+    })
   })
 
   describe('throwingHandler', () => {
