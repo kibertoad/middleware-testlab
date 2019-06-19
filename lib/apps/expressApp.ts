@@ -19,7 +19,6 @@ const DEFAULT_HANDLER: RequestHandler = (_req: Request, res: Response, next: Fun
 }
 
 const DEFAULT_ERROR_HANDLER: ErrorRequestHandler = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   err: any,
   _req: Request,
   res: Response,

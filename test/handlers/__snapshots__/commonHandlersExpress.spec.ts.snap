@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`commonHandler okHandler error assertors throw an error when no error is raised 1`] = `
+Object {
+  "message": "Expected error to be thrown, but it wasn't",
+  "name": "Error",
+}
+`;
