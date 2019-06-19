@@ -1,6 +1,6 @@
 import { Application, NextFunction, Request, Response } from 'express'
 import express, { Router } from 'express'
-import { RequestHandlerParams } from 'express-serve-static-core'
+import { ErrorRequestHandler, RequestHandlerParams } from 'express-serve-static-core'
 import { ExpressEndpointAssertor, EndpointDefinition, ErrorAssertor } from './apps'
 import serializeError from 'serialize-error'
 
@@ -11,6 +11,12 @@ const DEFAULT_HANDLER = (_req: Request, res: Response, next: Function) => {
   } catch (e) {
     console.error('Error while processing request: ', e)
     next(e)
+  }
+}
+
+const DEFAULT_ERROR_HANDLER = (err: Error, _req: Request, res: Response, _next: Function) => {
+  if (err) {
+    res.status(500).json(serializeError(err))
   }
 }
 
@@ -30,6 +36,7 @@ export function newExpressApp({
   routerMiddleware = [],
   transformedRequestAssertors = [],
   errorAssertors = [],
+  errorHandler = DEFAULT_ERROR_HANDLER,
   handler = DEFAULT_HANDLER,
   endpoint = DEFAULT_ENDPOINT
 }: {
@@ -38,9 +45,21 @@ export function newExpressApp({
   routerMiddleware?: RequestHandlerParams[]
   transformedRequestAssertors?: ExpressEndpointAssertor[]
   errorAssertors?: ErrorAssertor[]
+  errorHandler?: ErrorRequestHandler
   handler?: RequestHandlerParams
   endpoint?: string | EndpointDefinition
 }): Application {
+  const assertorErrorHandler = (err: Error, _req: Request, res: Response, next: Function) => {
+    try {
+      errorAssertors.forEach(assertor => {
+        assertor(err)
+      })
+    } catch (e) {
+      return next(e)
+    }
+    return next(err)
+  }
+
   const app = express()
 
   // Resolve endpoint from params
@@ -79,18 +98,7 @@ export function newExpressApp({
 
   app.use(router)
 
-  app.use((err: Error, _req: Request, res: Response, _next: Function) => {
-    try {
-      errorAssertors.forEach(assertor => {
-        assertor(err)
-      })
-    } catch (e) {
-      err = e
-    }
-
-    if (err) {
-      res.status(500).json(serializeError(err))
-    }
-  })
+  app.use(assertorErrorHandler)
+  app.use(errorHandler)
   return app
 }
