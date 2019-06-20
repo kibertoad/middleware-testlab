@@ -14,7 +14,6 @@ const DEFAULT_HANDLER = (ctx: BaseContext, next: Function) => {
  * @param {Middleware[]} [appMiddleware=[]]
  * @param {Middleware[]} [routerMiddleware=[]]
  * @param {KoaEndpointAssertor[]} [transformedRequestAssertors=[]]
- * @param {ErrorAssertor[]} [errorAssertors=[]
  * @param {Middleware} [handler] - if handler is not specified, by default sends 204 NO CONTENT
  * @param {string | EndpointDefinition} [endpoint='/'] - if endpoint is passed as string, or not specified, by default GET method is used.
  */
@@ -22,15 +21,12 @@ export function newKoaApp({
   appMiddleware = [],
   routerMiddleware = [],
   transformedRequestAssertors = [],
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  errorAssertors = [],
   handler = DEFAULT_HANDLER,
   endpoint = DEFAULT_ENDPOINT
 }: {
   appMiddleware?: Middleware[]
   routerMiddleware?: Middleware[]
   transformedRequestAssertors?: KoaEndpointAssertor[]
-  errorAssertors?: ErrorAssertor[]
   handler?: Middleware
   endpoint?: string | EndpointDefinition
 }): Application {

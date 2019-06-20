@@ -58,7 +58,7 @@ export function newExpressApp({
   handler?: RequestHandlerParams
   endpoint?: string | EndpointDefinition
 }): Application {
-  const assertorErrorHandler = (err: Error, _req: Request, res: Response, next: Function) => {
+  const assertorErrorHandler = (err: Error, _req: Request, _res: Response, next: Function) => {
     try {
       errorAssertors.forEach(assertor => {
         assertor(err)
