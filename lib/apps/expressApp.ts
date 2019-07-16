@@ -5,7 +5,12 @@ import {
   RequestHandler,
   RequestHandlerParams
 } from 'express-serve-static-core'
-import { ExpressEndpointAssertor, EndpointDefinition, ErrorAssertor } from './apps'
+import {
+  ExpressEndpointAssertor,
+  EndpointDefinition,
+  ErrorAssertor,
+  ExpressEndpointResponseAssertor
+} from './apps'
 import serializeError from 'serialize-error'
 
 export const DEFAULT_ENDPOINT = '/'
@@ -44,6 +49,7 @@ export function newExpressApp({
   routeMiddleware = [],
   routerMiddleware = [],
   transformedRequestAssertors = [],
+  transformedResponseAssertors = [],
   errorAssertors = [],
   errorHandler = DEFAULT_ERROR_HANDLER,
   handler = DEFAULT_HANDLER,
@@ -53,6 +59,7 @@ export function newExpressApp({
   routeMiddleware?: RequestHandlerParams[]
   routerMiddleware?: RequestHandlerParams[]
   transformedRequestAssertors?: ExpressEndpointAssertor[]
+  transformedResponseAssertors?: ExpressEndpointResponseAssertor[]
   errorAssertors?: ErrorAssertor[]
   errorHandler?: ErrorRequestHandler
   handler?: RequestHandlerParams
@@ -87,15 +94,28 @@ export function newExpressApp({
     router.use(middleware)
   })
 
-  const assertorMiddleware = transformedRequestAssertors.map(assertor => {
+  const assertorRequestMiddleware = transformedRequestAssertors.map(assertor => {
     return async (req: Request, _res: Response, next: Function) => {
       await assertor(req)
       next()
     }
   })
 
+  const assertorResponseMiddleware = transformedResponseAssertors.map(assertor => {
+    return async (_req: Request, res: Response, next: Function) => {
+      await assertor(res)
+      next()
+    }
+  })
+
   // @ts-ignore
-  router[method](path, routeMiddleware, assertorMiddleware, handler)
+  router[method](
+    path,
+    routeMiddleware,
+    assertorRequestMiddleware,
+    assertorResponseMiddleware,
+    handler
+  )
   appMiddleware.forEach(middleware => {
     app.use(middleware)
   })

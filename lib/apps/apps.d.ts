@@ -1,4 +1,4 @@
-import { Request } from 'express-serve-static-core'
+import { Request, Response } from 'express-serve-static-core'
 import { BaseContext } from 'koa'
 
 export interface EndpointDefinition {
@@ -8,6 +8,10 @@ export interface EndpointDefinition {
 
 export interface ExpressEndpointAssertor {
   (request: Request): void
+}
+
+export interface ExpressEndpointResponseAssertor {
+  (response: Response): void
 }
 
 export interface ErrorAssertor {

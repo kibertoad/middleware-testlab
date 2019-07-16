@@ -2,16 +2,31 @@ import { newExpressApp, DEFAULT_ENDPOINT } from '../../lib/apps/expressApp'
 import { expressMiddleware } from './expressRequestMutationMiddleware'
 import request from 'supertest'
 import { Request, Response, NextFunction } from 'express'
+import { expressNoCacheMiddleware } from './expressResponseMutationMiddleware'
 
 describe('mutation routeMiddleware', () => {
   describe('express', () => {
-    it('happy path', async () => {
+    it('happy path - request', async () => {
       const app = newExpressApp({
         routeMiddleware: [expressMiddleware()],
         transformedRequestAssertors: [
           (req: Request) => {
             // @ts-ignore
             expect(req.logger).toMatchSnapshot()
+          }
+        ]
+      })
+
+      const response = await request(app).get(DEFAULT_ENDPOINT)
+      expect(response.status).toEqual(204)
+    })
+
+    it('happy path - response', async () => {
+      const app = newExpressApp({
+        routeMiddleware: [expressNoCacheMiddleware()],
+        transformedResponseAssertors: [
+          (res: Response) => {
+            expect(res.getHeaders()).toMatchSnapshot()
           }
         ]
       })
