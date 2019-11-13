@@ -1,5 +1,4 @@
-import { Application, NextFunction, Request, Response } from 'express'
-import express, { Router } from 'express'
+import express, { Router, Application, NextFunction, Request, Response } from 'express'
 import {
   ErrorRequestHandler,
   RequestHandler,
@@ -10,8 +9,8 @@ import {
   EndpointDefinition,
   ErrorAssertor,
   ExpressEndpointResponseAssertor
-} from './apps'
-import serializeError from 'serialize-error'
+} from './apps-types'
+import { serializeError } from 'serialize-error'
 
 export const DEFAULT_ENDPOINT = '/'
 const DEFAULT_HANDLER: RequestHandler = (_req: Request, res: Response, next: Function) => {
@@ -39,8 +38,10 @@ const DEFAULT_ERROR_HANDLER: ErrorRequestHandler = (
  * @param {RequestHandlerParams[]} [appMiddleware=[]]
  * @param {RequestHandlerParams[]} [routeMiddleware=[]]
  * @param {ExpressEndpointAssertor[]} [transformedRequestAssertors=[]]
+ * @param transformedResponseAssertors
  * @param {ErrorAssertor[]} [errorAssertors=[]]
  * @param {RequestHandlerParams[]} [routerMiddleware=[]]
+ * @param errorHandler
  * @param {RequestHandlerParams} [handler] - if handler is not specified, by default sends 204 NO CONTENT
  * @param {string | EndpointDefinition} [endpoint='/'] - if endpoint is passed as string, or not specified, by default GET method is used.
  */

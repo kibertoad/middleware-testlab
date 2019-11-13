@@ -1,7 +1,7 @@
 import Koa, { BaseContext, Middleware } from 'koa'
 import Router from 'koa-router'
 import Application from 'koa'
-import { EndpointDefinition, KoaEndpointAssertor } from './apps'
+import { EndpointDefinition, KoaEndpointAssertor } from './apps-types'
 
 export const DEFAULT_ENDPOINT = '/'
 const DEFAULT_HANDLER = (ctx: BaseContext, next: Function) => {
