@@ -14,7 +14,7 @@
     "build": "tsc",
     "prepublishOnly": "npm run build",
     "test": "jest --config=jest.config.json",
-    "test:ci": "npm run eslint && npm run test",
+    "test:ci": "npm run eslint && npm run test && cd examples/test && npm install && npm run test",
     "test:update-snaphost": "jest --config=jest.config.json --updateSnapshot",
     "eslint": "eslint --format codeframe \"lib/**/*.ts\" \"test/**/*.ts\" \"examples/test/src/**/*.ts\"",
     "prettier": "prettier --write \"{lib,test,examples}/**/*.{js,ts}\""
