@@ -1,8 +1,8 @@
 import { RequestHandlerParams } from 'express-serve-static-core'
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 
 export function expressMiddleware(): RequestHandlerParams {
-  return (req: Request, _res: Response, next: Function) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     // @ts-ignore
     req.logger = {
       info: (): void => {},

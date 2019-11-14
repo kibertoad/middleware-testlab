@@ -7,7 +7,6 @@
     "declarationMap": false,
     "types": ["node", "jest"],
     "strict": true,
-    "module": "commonjs",
     "moduleResolution": "node",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
@@ -16,7 +15,7 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
-    "importHelpers": false,
+    "importHelpers": true,
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -24,7 +23,6 @@
   },
   "exclude": [
     "node_modules",
-    "dist",
-    "examples"
+    "dist"
   ]
 }
