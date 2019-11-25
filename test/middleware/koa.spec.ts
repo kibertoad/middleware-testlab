@@ -15,7 +15,6 @@ describe('mutation routeMiddleware', () => {
         routerMiddleware: [koaMiddleware()],
         transformedRequestAssertors: [
           (ctx: BaseContext) => {
-            // @ts-ignore
             expect(ctx.logger).toMatchSnapshot()
           }
         ]
